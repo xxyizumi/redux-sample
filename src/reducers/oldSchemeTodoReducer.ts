@@ -1,30 +1,31 @@
-import { ADD_TODO, REMOVE_TODO, TodoActionTypes } from "../features/oldSchemeTodos/oldSchemeTodoAction";
+import { ADD_TODO, REMOVE_TODO, TodoActionTypes } from "../actions/oldSchemeTodoAction";
 
-export interface todo {
+export interface Todo {
     id: number;
     text: string;
 }
 
-interface TodoState {
-    todos: todo[]
+export interface TodoState {
+    todos: Todo[]
 }
 
 const internalState: TodoState = {
     todos: []
 }
 
-export default (state = internalState, action: TodoActionTypes) =>{
+export const TodoReducer = (state = internalState, action: TodoActionTypes): TodoState => {
     switch(action.type) {
         case ADD_TODO:
             return {
                 ...state,
-                todos:[...state.todos, {id:"", text: action.payload}]
+                todos: [...state.todos, {id:state.todos.length + 1, text: action.payload}]
             }
         case REMOVE_TODO:
-            const id = action.payload;
             return {
                 ...state,
-                todos: state.todos.filter(todo => todo.id != id)
+                todos: state.todos.filter(todo => {
+                    return todo.id !== action.payload
+                })
             }
         default:
             return state;
